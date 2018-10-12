@@ -12,11 +12,18 @@ namespace Observation.Classes
         private int observablePrevX;
         private int observablePrevY;
 
-        // Рандом
-        public Observer()
+        public Observer(int x, int y)
         {
-            X = 30;
-            Y = 30;
+
+            if (x < 0)
+                throw new ArgumentOutOfRangeException("Abscissa value can't be a negative number!");
+
+            if (y < 0)
+                throw new ArgumentOutOfRangeException("Ordinate value can't be a negative number!");
+
+            X = x;
+            Y = y;
+
         }
 
         public void Update(IMessage message)
@@ -24,33 +31,17 @@ namespace Observation.Classes
             
             if (Math.Abs(message.X - X) < Math.Abs(observablePrevX - X) ||
                 Math.Abs(message.Y - Y) < Math.Abs(observablePrevY - Y))
-                RunAway(message.Direction);
+                RunAway(message);
 
             observablePrevX = message.X;
             observablePrevY = message.Y;
 
         } 
 
-        private void RunAway(DirectionType observableDirection)
+        private void RunAway(IMessage message)
         {
-            switch (observableDirection)
-            {
-                case DirectionType.Up:
-                    Y--;
-                    break;
-                case DirectionType.Down:
-                    Y++;
-                    break;
-                case DirectionType.Right:
-                    X--;
-                    break;
-                case DirectionType.Left:
-                    X++;
-                    break;
-            }
+            // Magic
         }
-        
-        // Сохранить границы
 
     }
 }

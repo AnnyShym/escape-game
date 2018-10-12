@@ -1,4 +1,5 @@
 ﻿using Observation.Types;
+using System;
 using System.Collections.Generic;
 
 namespace Observation.Classes
@@ -10,15 +11,25 @@ namespace Observation.Classes
 
         public int X { get; private set; }
         public int Y { get; private set; }
+        public DirectionType Direction { get; private set; }
 
-        public Observable()
+        public int WindowWidth { get; private set; }
+        public int WindowHeight { get; private set; }
+
+        public Observable(int x, int y)
         {
 
             ObserverList = new List<IObserver>();
 
-            // Рандом
-            X = 0;
-            Y = 0;
+            if (x < 0)
+                throw new ArgumentOutOfRangeException("Abscissa value can't be a negative number!");
+
+            if (y < 0)
+                throw new ArgumentOutOfRangeException("Ordinate value can't be a negative number!");
+
+            X = x;
+            Y = y;
+            Direction = DirectionType.None;
 
         }
 
@@ -35,32 +46,44 @@ namespace Observation.Classes
         private void NotifyObservers()
         {
             foreach (IObserver observer in ObserverList)
-                observer.Update(new Message(X, Y));
+                observer.Update(new Message(X, Y, Direction, WindowWidth, WindowHeight));
         }
 
-        public void Move(DirectionType direction)
+        public void Move(DirectionType direction, int windowWidth, int windowHeight)
         {
 
-            switch(direction) {
+            if (windowWidth < 0)
+                throw new ArgumentOutOfRangeException("Window width can't be a negative number!");
+
+            if (windowHeight < 0)
+                throw new ArgumentOutOfRangeException("Window height can't be a negative number!");
+
+            Direction = direction;
+            WindowWidth = windowWidth;
+            WindowHeight = windowHeight;
+
+            switch (direction) {
                 case DirectionType.Up:
-                    Y++;
+                    if (Y > 0)
+                        Y--;
                     break;
                 case DirectionType.Down:
-                    Y--;
+                    if (Y < windowHeight)
+                        Y++;
                     break;
                 case DirectionType.Right:
-                    X++;
+                    if (X < windowWidth)
+                        X++;
                     break;
                 case DirectionType.Left:
-                    X--;
+                    if (X > 0)
+                        X--;
                     break;
             }
 
             NotifyObservers();
 
         }
-
-        // Сохранить границы
 
     }
 }
