@@ -41,13 +41,26 @@ namespace EscapeGame.Classes
             IMessage message = new Message(x, y, windowWidth, windowHeight, actionRadius);
             Task task;
             List<Task> tasks = new List<Task>();
+            Task allTasks = null;
 
-            foreach (IObserver observer in ObserverList) {
-                task = Task.Run(() => observer.Update(message));
-                tasks.Add(task);
+            try {
+
+                foreach (IObserver observer in ObserverList)
+                {
+                    task = Task.Run(() => observer.Update(message));
+                    tasks.Add(task);
+                }
+
+                allTasks = Task.WhenAll(tasks);
+                await allTasks;
+
             }
+            catch {
 
-            await Task.WhenAll(tasks);
+                foreach (var ex in allTasks.Exception.InnerExceptions)
+                    throw ex;
+
+            }
 
         }
 
