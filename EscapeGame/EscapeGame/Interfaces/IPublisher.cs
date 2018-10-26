@@ -10,7 +10,7 @@ namespace EscapeGame.Interfaces
         void AddObserver(IObserver observer);
         void RemoveObserver(IObserver observer);
 
-        void NotifyObservers(int x, int y, int windowWidth, int windowHeight, int actionRadius);
+        void NotifyObserversAsync(int x, int y, int windowWidth, int windowHeight, int actionRadius);
 
     }
 }

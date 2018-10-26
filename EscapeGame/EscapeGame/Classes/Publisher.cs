@@ -1,6 +1,7 @@
 ﻿using EscapeGame.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EscapeGame.Classes
 {
@@ -34,10 +35,20 @@ namespace EscapeGame.Classes
 
         }
 
-        public void NotifyObservers(int x, int y, int windowWidth, int windowHeight, int actionRadius)
+        public async void NotifyObserversAsync(int x, int y, int windowWidth, int windowHeight, int actionRadius)
         {
-            foreach (IObserver observer in ObserverList)
-                observer.Update(new Message(x, y, windowWidth, windowHeight, actionRadius));
+
+            IMessage message = new Message(x, y, windowWidth, windowHeight, actionRadius);
+            Task task;
+            List<Task> tasks = new List<Task>();
+
+            foreach (IObserver observer in ObserverList) {
+                task = Task.Run(() => observer.Update(message));
+                tasks.Add(task);
+            }
+
+            await Task.WhenAll(tasks);
+
         }
 
     }

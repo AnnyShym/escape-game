@@ -53,7 +53,7 @@ namespace EscapeGame.Classes
                     GaveUp = true;
                 else
                     if (Math.Abs(message.X - X) <= ThreatRadius || Math.Abs(message.Y - Y) <= ThreatRadius)
-                    RunAway(message);
+                        RunAway(message);
 
             }
 
