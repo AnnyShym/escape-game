@@ -64,26 +64,52 @@ namespace EscapeGame.Classes
         private void RunAway(IMessage message)
         {
 
+            List<ShiftCoordinateDelegate> optimalShifts = new List<ShiftCoordinateDelegate>();
             List<ShiftCoordinateDelegate> possibleShifts = new List<ShiftCoordinateDelegate>();
             ShiftCoordinateDelegate shiftCoordinate;
 
-            if (Y - Step >= 0)
+            if (Y - Step >= 0) {
+                shiftCoordinate = () => Y = Y - Step;
                 if (Math.Abs((Y - Step) - message.Y) > Math.Abs(Y - message.Y))
-                    possibleShifts.Add(shiftCoordinate = (() => Y = Y - Step));
-            if (Y + Step <= message.WindowHeight)
+                    optimalShifts.Add(shiftCoordinate);
+                else
+                    possibleShifts.Add(shiftCoordinate);
+            }
+            if (Y + Step <= message.WindowHeight) {
+                shiftCoordinate = () => Y = Y + Step;
                 if (Math.Abs((Y + Step) - message.Y) > Math.Abs(Y - message.Y))
-                    possibleShifts.Add(shiftCoordinate = (() => Y = Y + Step));
-            if (X + Step <= message.WindowWidth)
+                    optimalShifts.Add(shiftCoordinate);
+                else
+                    possibleShifts.Add(shiftCoordinate);
+            }
+            if (X + Step <= message.WindowWidth) {
+                shiftCoordinate = () => X = X + Step;
                 if (Math.Abs((X + Step) - message.X) > Math.Abs(X - message.X))
-                    possibleShifts.Add(shiftCoordinate = (() => X = X + Step));
-            if (X - Step >= 0)
+                    optimalShifts.Add(shiftCoordinate);
+                else
+                    possibleShifts.Add(shiftCoordinate);
+            }
+            if (X - Step >= 0) {
+                shiftCoordinate = () => X = X - Step;
                 if (Math.Abs((X - Step) - message.X) > Math.Abs(X - message.X))
-                    possibleShifts.Add(shiftCoordinate = (() => X = X - Step));
+                    optimalShifts.Add(shiftCoordinate);
+                else
+                    possibleShifts.Add(shiftCoordinate);
+            }
 
-            Random random = new Random();
-            int randomIndex = random.Next(possibleShifts.Count);
+            if (optimalShifts.Count != 0) {
 
-            possibleShifts[randomIndex]();
+                Random random = new Random();
+                int randomIndex = random.Next(optimalShifts.Count);
+
+                optimalShifts[randomIndex]();
+
+            }
+            else
+                if (Math.Abs(Y - message.Y) > Math.Abs(X - message.X))
+                    possibleShifts[0]();
+                else
+                    possibleShifts[1]();
 
         }
 
