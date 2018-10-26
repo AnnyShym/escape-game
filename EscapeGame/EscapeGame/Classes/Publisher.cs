@@ -45,8 +45,7 @@ namespace EscapeGame.Classes
 
             try {
 
-                foreach (IObserver observer in ObserverList)
-                {
+                foreach (IObserver observer in ObserverList) {
                     task = Task.Run(() => observer.Update(message));
                     tasks.Add(task);
                 }
@@ -56,10 +55,7 @@ namespace EscapeGame.Classes
 
             }
             catch {
-
-                foreach (var ex in allTasks.Exception.InnerExceptions)
-                    throw ex;
-
+                throw new ArgumentOutOfRangeException($"Point can't be outside the window area! ({allTasks.Exception.InnerExceptions.Count})");
             }
 
         }
