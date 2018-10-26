@@ -10,7 +10,7 @@ namespace EscapeGame.Classes
 
         public List<IObserver> ObserverList { get; private set; }
 
-        public Publisher(IObservable observable)
+        public Publisher()
         {
             ObserverList = new List<IObserver>();            
         }
