@@ -66,19 +66,19 @@ namespace EscapeGame.Classes
 
             switch (direction) {
                 case DirectionType.Up:
-                    if (Y > 0)
+                    if (Y >= Step)
                         Y = Y - Step;
                     break;
                 case DirectionType.Down:
-                    if (Y < windowHeight)
+                    if (Y <= windowHeight - Step)
                         Y = Y + Step;
                     break;
                 case DirectionType.Right:
-                    if (X < windowWidth)
+                    if (X <= windowWidth - Step)
                         X = X + Step;
                     break;
                 case DirectionType.Left:
-                    if (X > 0)
+                    if (X >= Step)
                         X = X - Step;
                     break;
             }
