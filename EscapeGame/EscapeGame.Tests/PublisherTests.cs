@@ -57,7 +57,7 @@ namespace EscapeGame.Tests
         }
 
         [TestMethod]
-        public void Publisher_Where_NotifyObserversAsync_Parameter_WindowWidth_LessThan_X_OfSome_Observers()
+        public void Publisher_Where_NotifyObservers_Parameter_WindowWidth_LessThan_X_OfSome_Observers()
         {
 
             Publisher publisher = new Publisher();
@@ -67,15 +67,15 @@ namespace EscapeGame.Tests
 
             publisher.AddObserver(observer1);
             publisher.AddObserver(observer2);
-            publisher.AddObserver(observer3);
+            publisher.AddObserver(observer3);            
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => publisher.NotifyObserversAsync(5, 5, 30, 200, 5));
+                () => publisher.NotifyObservers(5, 90, 30, 200, 5));
 
         }
 
         [TestMethod]
-        public void Publisher_Where_NotifyObserversAsync_Parameter_WindowHeight_LessThan_Y_OfSome_Observers()
+        public void Publisher_Where_NotifyObservers_Parameter_WindowHeight_LessThan_Y_OfSome_Observers()
         {
 
             Publisher publisher = new Publisher();
@@ -85,32 +85,34 @@ namespace EscapeGame.Tests
 
             publisher.AddObserver(observer1);
             publisher.AddObserver(observer2);
-            publisher.AddObserver(observer3);
+            publisher.AddObserver(observer3);            
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => publisher.NotifyObserversAsync(5, 5, 200, 70, 5));
+                () => publisher.NotifyObservers(5, 5, 200, 70, 5));
 
         }
 
         [TestMethod]
-        public void Publisher_Where_NotifyObserversAsync_Parameters_WindowWidth_And_WindowHeight_MoreOrEqualTo_X_And_Y_OfAllThe_Observers_Respectively()
+        public void Publisher_Where_NotifyObservers_Parameters_WindowWidth_And_WindowHeight_MoreOrEqualTo_X_And_Y_OfAllThe_Observers_Respectively()
         {
 
             Publisher publisher = new Publisher();
-            IObserver observer1 = new Observer(0, 0, 1, 30);
-            IObserver observer2 = new Observer(0, 0, 3, 40);
-            IObserver observer3 = new Observer(10, 100, 5, 70);
+            IObserver observer1 = new Observer(50, 100, 5, 30);
+            IObserver observer2 = new Observer(50, 100, 5, 30);
+            IObserver observer3 = new Observer(50, 100, 5, 30);
 
             publisher.AddObserver(observer1);
             publisher.AddObserver(observer2);
             publisher.AddObserver(observer3);
 
-            try {
-                publisher.NotifyObserversAsync(5, 5, 10, 100, 5);
-            }
-            catch (Exception ex) {
-                Assert.Fail("Expected no exception, but got: " + ex.Message);
-            }
+            publisher.NotifyObservers(25, 75, 500, 1000, 5);
+
+            Assert.IsTrue(((observer1.X == 55 && observer1.Y == 100) ||
+                (observer1.X == 50 && observer1.Y == 105)) &&
+                ((observer2.X == 55 && observer2.Y == 100) ||
+                (observer2.X == 50 && observer2.Y == 105)) &&
+                ((observer3.X == 55 && observer3.Y == 100) ||
+                (observer3.X == 50 && observer3.Y == 105)));
 
         }
 

@@ -35,28 +35,32 @@ namespace EscapeGame.Classes
 
         }
 
-        public async void NotifyObserversAsync(int x, int y, int windowWidth, int windowHeight, int actionRadius)
+        public void NotifyObservers(int x, int y, int windowWidth, int windowHeight, int actionRadius)
         {
 
             IMessage message = new Message(x, y, windowWidth, windowHeight, actionRadius);
-            Task task;
-            List<Task> tasks = new List<Task>();
-            Task allTasks = null;
+            Task[] tasks = new Task[ObserverList.Count];
 
             try {
 
+                int i = 0;
                 foreach (IObserver observer in ObserverList) {
-                    task = Task.Run(() => observer.Update(message));
-                    tasks.Add(task);
+                    tasks[i++] = Task.Run(() => observer.Update(message));
                 }
 
-                allTasks = Task.WhenAll(tasks);
-                await allTasks;
+                Task.WaitAll(tasks);
 
             }
             catch {
-                throw new ArgumentOutOfRangeException($"Point can't be outside the window area! ({allTasks.Exception.InnerExceptions.Count})");
-            }
+
+                int exceptionsCount = 0;
+                foreach (var task in tasks)
+                    if (task.Exception != null)
+                        exceptionsCount++;
+
+                throw new ArgumentOutOfRangeException($"Point can't be outside the window area! ({exceptionsCount})");
+
+            }               
 
         }
 

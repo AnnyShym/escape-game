@@ -83,7 +83,7 @@ namespace EscapeGame.Classes
                     break;
             }
 
-            PublisherObject.NotifyObserversAsync(X, Y, windowWidth, windowHeight, ActionRadius);
+            PublisherObject.NotifyObservers(X, Y, windowWidth, windowHeight, ActionRadius);
 
         }
         

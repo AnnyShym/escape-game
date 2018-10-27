@@ -15,7 +15,7 @@ namespace EscapeGame.Classes
 
         public bool GaveUp { get; private set; }
 
-        public Observer(int x, int y, int step, int threadRadius)
+        public Observer(int x, int y, int step, int threatRadius)
         {
 
             if (x < 0)
@@ -27,14 +27,14 @@ namespace EscapeGame.Classes
             if (step <= 0)
                 throw new ArgumentOutOfRangeException("Step value should be a positive number!");
 
-            if (threadRadius <= 0)
+            if (threatRadius <= 0)
                 throw new ArgumentOutOfRangeException("Thread radius value should be a positive number!");
 
             X = x;
             Y = y;
 
             Step = step;
-            ThreatRadius = threadRadius;
+            ThreatRadius = threatRadius;
 
             GaveUp = false;
 
@@ -49,10 +49,10 @@ namespace EscapeGame.Classes
                 if (message.WindowWidth < X || message.WindowHeight < Y)
                     throw new ArgumentOutOfRangeException("Point can't be outside the window area!");
 
-                if (Math.Abs(message.X - X) <= message.ActionRadius || Math.Abs(message.Y - Y) <= message.ActionRadius)
+                if (Math.Abs(message.X - X) <= message.ActionRadius && Math.Abs(message.Y - Y) <= message.ActionRadius)
                     GaveUp = true;
                 else
-                    if (Math.Abs(message.X - X) <= ThreatRadius || Math.Abs(message.Y - Y) <= ThreatRadius)
+                    if (Math.Abs(message.X - X) <= ThreatRadius && Math.Abs(message.Y - Y) <= ThreatRadius)
                         RunAway(message);
 
             }
@@ -65,37 +65,21 @@ namespace EscapeGame.Classes
         {
 
             List<ShiftCoordinateDelegate> optimalShifts = new List<ShiftCoordinateDelegate>();
-            List<ShiftCoordinateDelegate> possibleShifts = new List<ShiftCoordinateDelegate>();
             ShiftCoordinateDelegate shiftCoordinate;
 
-            if (Y - Step >= 0) {
-                shiftCoordinate = () => Y = Y - Step;
+            if (Y - Step >= 0)
                 if (Math.Abs((Y - Step) - message.Y) > Math.Abs(Y - message.Y))
-                    optimalShifts.Add(shiftCoordinate);
-                else
-                    possibleShifts.Add(shiftCoordinate);
-            }
-            if (Y + Step <= message.WindowHeight) {
-                shiftCoordinate = () => Y = Y + Step;
+                    optimalShifts.Add(shiftCoordinate = (() => Y = Y - Step));
+            if (Y + Step <= message.WindowHeight)
                 if (Math.Abs((Y + Step) - message.Y) > Math.Abs(Y - message.Y))
-                    optimalShifts.Add(shiftCoordinate);
-                else
-                    possibleShifts.Add(shiftCoordinate);
-            }
-            if (X + Step <= message.WindowWidth) {
-                shiftCoordinate = () => X = X + Step;
+                    optimalShifts.Add(shiftCoordinate = (() => Y = Y + Step));
+            if (X + Step <= message.WindowWidth)
                 if (Math.Abs((X + Step) - message.X) > Math.Abs(X - message.X))
-                    optimalShifts.Add(shiftCoordinate);
-                else
-                    possibleShifts.Add(shiftCoordinate);
-            }
-            if (X - Step >= 0) {
+                    optimalShifts.Add(shiftCoordinate = (() => X = X + Step));
+            if (X - Step >= 0)
                 shiftCoordinate = () => X = X - Step;
                 if (Math.Abs((X - Step) - message.X) > Math.Abs(X - message.X))
-                    optimalShifts.Add(shiftCoordinate);
-                else
-                    possibleShifts.Add(shiftCoordinate);
-            }
+                    optimalShifts.Add(shiftCoordinate = (() => X = X - Step));
 
             if (optimalShifts.Count != 0) {
 
@@ -105,11 +89,6 @@ namespace EscapeGame.Classes
                 optimalShifts[randomIndex]();
 
             }
-            else
-                if (Math.Abs(Y - message.Y) > Math.Abs(X - message.X))
-                    possibleShifts[0]();
-                else
-                    possibleShifts[1]();
 
         }
 
