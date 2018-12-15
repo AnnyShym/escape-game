@@ -2,6 +2,9 @@
 
 namespace EscapeGame.Classes
 {
+    /// <summary>
+    /// The message for sending from observable to his observers
+    /// </summary>
     public class Message : IMessage
     {
 

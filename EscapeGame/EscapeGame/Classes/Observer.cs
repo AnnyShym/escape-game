@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace EscapeGame.Classes
 {
+    /// <summary>
+    /// Public interface for creating Observable-Observers pattern
+    /// </summary>
     public class Observer : IObserver
     {
 
@@ -40,6 +43,11 @@ namespace EscapeGame.Classes
 
         }
 
+        /// <summary>
+        /// Method for changing the condition of the observer after getting the <param name="message"/>
+        /// </summary>
+        /// <param name="message">Message from observable</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the input coordinates are out of the window borders</exception>
         public void Update(IMessage message)
         {
 

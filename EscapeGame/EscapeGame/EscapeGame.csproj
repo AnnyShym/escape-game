@@ -44,6 +44,7 @@
     <Compile Include="Classes\Observable.cs" />
     <Compile Include="Classes\Observer.cs" />
     <Compile Include="Classes\Publisher.cs" />
+    <Compile Include="Classes\VectorObserver.cs" />
     <Compile Include="Interfaces\IMessage.cs" />
     <Compile Include="Interfaces\IObservable.cs" />
     <Compile Include="Interfaces\IObserver.cs" />

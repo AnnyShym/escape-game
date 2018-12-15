@@ -14,6 +14,7 @@ namespace EscapeGame.Interfaces
         IPublisher PublisherObject { get; }
 
         void Move(DirectionType direction, int windowWidth, int windowHeight);
+        void Move(int windowWidth, int windowHeight, int x, int y);
 
     }
 }

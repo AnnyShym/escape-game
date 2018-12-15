@@ -5,9 +5,15 @@ using System.Threading.Tasks;
 
 namespace EscapeGame.Classes
 {
+    /// <summary>
+    /// Pubic class for creating Observable-Observers pattern
+    /// </summary>
     public class Publisher: IPublisher 
     {
 
+        /// <summary>
+        /// All observers of the observable
+        /// </summary>
         public List<IObserver> ObserverList { get; private set; }
 
         public Publisher()
@@ -15,6 +21,11 @@ namespace EscapeGame.Classes
             ObserverList = new List<IObserver>();            
         }
 
+        /// <summary>
+        /// Method for adding new observer to the list of observers of the observable
+        /// </summary>
+        /// <param name="observer">Observer object for adding</param>
+        /// <exception cref="ArgumentNullException">Is thrown if input observer if equal to null</exception>
         public void AddObserver(IObserver observer)
         {
 
@@ -25,6 +36,11 @@ namespace EscapeGame.Classes
 
         }
 
+        /// <summary>
+        /// Method for removing the observer from the list of observers
+        /// </summary>
+        /// <param name="observer">Observer object for deleting</param>
+        /// <exception cref="ArgumentNullException">Is thrown if input observer if equal to null</exception>
         public void RemoveObserver(IObserver observer)
         {
 
@@ -35,10 +51,13 @@ namespace EscapeGame.Classes
 
         }
 
-        public void NotifyObservers(int x, int y, int windowWidth, int windowHeight, int actionRadius)
+        /// <summary>
+        /// Method for informing all observers from the list about movement of the hunter
+        /// </summary>
+        /// <param name="message">The message to send</param>
+        public void NotifyObservers(IMessage message)
         {
 
-            IMessage message = new Message(x, y, windowWidth, windowHeight, actionRadius);
             Task[] tasks = new Task[ObserverList.Count];
 
             try {
@@ -58,7 +77,7 @@ namespace EscapeGame.Classes
                     if (task.Exception != null)
                         exceptionsCount++;
 
-                throw new ArgumentOutOfRangeException($"Point can't be outside the window area! ({exceptionsCount})");
+                throw new ArgumentOutOfRangeException($"Oops... Some errors occured while using NotifyObservers method! ({exceptionsCount})");
 
             }               
 
