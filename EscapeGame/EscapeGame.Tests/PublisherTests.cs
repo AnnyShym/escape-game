@@ -22,7 +22,7 @@ namespace EscapeGame.Tests
         {
 
             Publisher publisher = new Publisher();
-            publisher.AddObserver(new Observer(0, 0, 1, 30));
+            publisher.AddObserver(new Avoidant(0, 0, 1, 30));
 
             Assert.AreEqual(1, publisher.ObserverList.Count);
 
@@ -41,8 +41,8 @@ namespace EscapeGame.Tests
         {
 
             Publisher publisher = new Publisher();
-            IObserver observer1 = new Observer(0, 0, 1, 30);
-            IObserver observer2 = new Observer(0, 0, 3, 40);
+            IAvoidant observer1 = new Avoidant(0, 0, 1, 30);
+            IAvoidant observer2 = new Avoidant(0, 0, 3, 40);
 
             publisher.AddObserver(observer1);
             publisher.AddObserver(observer1);
@@ -61,16 +61,16 @@ namespace EscapeGame.Tests
         {
 
             Publisher publisher = new Publisher();
-            IObserver observer1 = new Observer(100, 50, 1, 30);
-            IObserver observer2 = new Observer(50, 100, 3, 40);
-            IObserver observer3 = new Observer(10, 110, 3, 40);
+            IAvoidant observer1 = new Avoidant(100, 50, 1, 30);
+            IAvoidant observer2 = new Avoidant(50, 100, 3, 40);
+            IAvoidant observer3 = new Avoidant(10, 110, 3, 40);
 
             publisher.AddObserver(observer1);
             publisher.AddObserver(observer2);
             publisher.AddObserver(observer3);            
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => publisher.NotifyObservers(5, 90, 30, 200, 5));
+                () => publisher.NotifyObservers(new ThreatMessage(5, 90, 30, 200, 5)));
 
         }
 
@@ -79,16 +79,16 @@ namespace EscapeGame.Tests
         {
 
             Publisher publisher = new Publisher();
-            IObserver observer1 = new Observer(100, 50, 1, 30);
-            IObserver observer2 = new Observer(50, 100, 3, 40);
-            IObserver observer3 = new Observer(10, 110, 3, 40);
+            IAvoidant observer1 = new Avoidant(100, 50, 1, 30);
+            IAvoidant observer2 = new Avoidant(50, 100, 3, 40);
+            IAvoidant observer3 = new Avoidant(10, 110, 3, 40);
 
             publisher.AddObserver(observer1);
             publisher.AddObserver(observer2);
             publisher.AddObserver(observer3);            
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => publisher.NotifyObservers(5, 5, 200, 70, 5));
+                () => publisher.NotifyObservers(new ThreatMessage(5, 5, 200, 70, 5)));
 
         }
 
@@ -97,15 +97,15 @@ namespace EscapeGame.Tests
         {
 
             Publisher publisher = new Publisher();
-            IObserver observer1 = new Observer(50, 100, 5, 30);
-            IObserver observer2 = new Observer(50, 100, 5, 30);
-            IObserver observer3 = new Observer(50, 100, 5, 30);
+            IAvoidant observer1 = new Avoidant(50, 100, 5, 30);
+            IAvoidant observer2 = new Avoidant(50, 100, 5, 30);
+            IAvoidant observer3 = new Avoidant(50, 100, 5, 30);
 
             publisher.AddObserver(observer1);
             publisher.AddObserver(observer2);
             publisher.AddObserver(observer3);
 
-            publisher.NotifyObservers(25, 75, 500, 1000, 5);
+            publisher.NotifyObservers(new ThreatMessage(25, 75, 500, 1000, 5));
 
             Assert.IsTrue(((observer1.X == 55 && observer1.Y == 100) ||
                 (observer1.X == 50 && observer1.Y == 105)) &&

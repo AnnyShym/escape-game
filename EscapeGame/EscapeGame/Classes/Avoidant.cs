@@ -7,7 +7,7 @@ namespace EscapeGame.Classes
     /// <summary>
     /// Public interface for creating Observable-Observers pattern
     /// </summary>
-    public class Observer : IObserver
+    public class Avoidant : IAvoidant
     {
 
         public int X { get; private set; }
@@ -18,7 +18,7 @@ namespace EscapeGame.Classes
 
         public bool GaveUp { get; private set; }
 
-        public Observer(int x, int y, int step, int threatRadius)
+        public Avoidant(int x, int y, int step, int threatRadius)
         {
 
             if (x < 0)
@@ -51,25 +51,27 @@ namespace EscapeGame.Classes
         public void Update(IMessage message)
         {
 
-            if (!GaveUp)
-            {
+            IThreatMessage threatMessage = message as IThreatMessage;
 
-                if (message.WindowWidth < X || message.WindowHeight < Y)
-                    throw new ArgumentOutOfRangeException("Point can't be outside the window area!");
+            if (message != null)
+                if (!GaveUp) {
 
-                if (Math.Abs(message.X - X) <= message.ActionRadius && Math.Abs(message.Y - Y) <= message.ActionRadius)
-                    GaveUp = true;
-                else
-                    if (Math.Abs(message.X - X) <= ThreatRadius && Math.Abs(message.Y - Y) <= ThreatRadius)
-                        RunAway(message);
+                    if (threatMessage.WindowWidth < X || threatMessage.WindowHeight < Y)
+                        throw new ArgumentOutOfRangeException("Point can't be outside the window area!");
 
-            }
+                    if (Math.Abs(threatMessage.X - X) <= threatMessage.ActionRadius && Math.Abs(threatMessage.Y - Y) <= threatMessage.ActionRadius)
+                        GaveUp = true;
+                    else
+                        if (Math.Abs(threatMessage.X - X) <= ThreatRadius && Math.Abs(threatMessage.Y - Y) <= ThreatRadius)
+                            RunAway(threatMessage);
+
+                }
 
         }
 
         private delegate void ShiftCoordinateDelegate();
 
-        private void RunAway(IMessage message)
+        private void RunAway(IThreatMessage message)
         {
 
             List<ShiftCoordinateDelegate> optimalShifts = new List<ShiftCoordinateDelegate>();

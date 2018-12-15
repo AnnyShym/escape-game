@@ -63,7 +63,7 @@ namespace EscapeGame.Classes
             try {
 
                 int i = 0;
-                foreach (IObserver observer in ObserverList) {
+                foreach (IAvoidant observer in ObserverList) {
                     tasks[i++] = Task.Run(() => observer.Update(message));
                 }
 

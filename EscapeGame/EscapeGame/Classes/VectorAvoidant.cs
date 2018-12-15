@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace EscapeGame.Classes
 {
-    public class VectorObserver : IObserver
+    public class VectorAvoidant : IAvoidant
     {
 
         public int X { get; private set; }
@@ -15,7 +15,7 @@ namespace EscapeGame.Classes
 
         public bool GaveUp { get; private set; }
 
-        public VectorObserver(int x, int y, int step, int threatRadius)
+        public VectorAvoidant(int x, int y, int step, int threatRadius)
         {
 
             if (x < 0)
@@ -43,19 +43,21 @@ namespace EscapeGame.Classes
         public void Update(IMessage message)
         {
 
-            if (!GaveUp)
-            {
+            IThreatMessage threatMessage = message as IThreatMessage;
 
-                if (message.WindowWidth < X || message.WindowHeight < Y)
-                    throw new ArgumentOutOfRangeException("Point can't be outside the window area!");
+            if (message != null)
+                if (!GaveUp) {
 
-                if (Math.Abs(message.X - X) <= message.ActionRadius && Math.Abs(message.Y - Y) <= message.ActionRadius)
-                    GaveUp = true;
-                else
-                    if (Math.Abs(message.X - X) <= ThreatRadius && Math.Abs(message.Y - Y) <= ThreatRadius)
-                    RunAway(message);
+                    if (threatMessage.WindowWidth < X || threatMessage.WindowHeight < Y)
+                        throw new ArgumentOutOfRangeException("Point can't be outside the window area!");
 
-            }
+                    if (Math.Abs(threatMessage.X - X) <= threatMessage.ActionRadius && Math.Abs(threatMessage.Y - Y) <= threatMessage.ActionRadius)
+                        GaveUp = true;
+                    else
+                        if (Math.Abs(threatMessage.X - X) <= ThreatRadius && Math.Abs(threatMessage.Y - Y) <= ThreatRadius)
+                            RunAway(message);
+
+                }
 
         }
 
@@ -64,22 +66,24 @@ namespace EscapeGame.Classes
         private void RunAway(IMessage message)
         {
 
+            IThreatMessage threatMessage = (IThreatMessage)message;
+
             int moveX, moveY, preciseMoveX;
             double tgA;
 
-            tgA = (message.Y - Y) / (message.X - X);
+            tgA = (threatMessage.Y - Y) / (threatMessage.X - X);
 
             moveX = (int)Math.Sqrt((Step * Step) / (tgA * tgA + 1));
             preciseMoveX = moveX;
             moveY = (int)Math.Abs(tgA) * moveX;
 
-            if (message.X < X && message.Y > Y) {
+            if (threatMessage.X < X && threatMessage.Y > Y) {
 
-                if (X + moveX < message.WindowWidth)
+                if (X + moveX < threatMessage.WindowWidth)
                     X = X + moveX;
                 else {
-                    moveX = message.WindowWidth - X;
-                    X = message.WindowWidth;
+                    moveX = threatMessage.WindowWidth - X;
+                    X = threatMessage.WindowWidth;
                     moveY = (int)Math.Sqrt(Step * Step - moveX * moveX);
                 }
 
@@ -89,11 +93,11 @@ namespace EscapeGame.Classes
                     moveY = Y;
                     Y = 0;
                     moveX = (int)Math.Sqrt(Step * Step - moveY * moveY);
-                    X = (X + (moveX - preciseMoveX) < message.WindowWidth) ? X + (moveX - preciseMoveX) : message.WindowWidth;
+                    X = (X + (moveX - preciseMoveX) < threatMessage.WindowWidth) ? X + (moveX - preciseMoveX) : threatMessage.WindowWidth;
                 }
 
             }
-            if (message.X > X && message.Y > Y) {
+            if (threatMessage.X > X && threatMessage.Y > Y) {
 
                 if (X - moveX > 0)
                     X = X - moveX;
@@ -113,7 +117,7 @@ namespace EscapeGame.Classes
                 }
 
             }
-            if (message.X > X && message.Y < Y)
+            if (threatMessage.X > X && threatMessage.Y < Y)
             {
 
                 if (X - moveX > 0)
@@ -124,31 +128,31 @@ namespace EscapeGame.Classes
                     moveY = (int)Math.Sqrt(Step * Step - moveX * moveX);
                 }
 
-                if (Y + moveY < message.WindowHeight)
+                if (Y + moveY < threatMessage.WindowHeight)
                     Y = Y + moveY;
                 else {
-                    moveY = message.WindowHeight - Y;
-                    Y = message.WindowHeight;
+                    moveY = threatMessage.WindowHeight - Y;
+                    Y = threatMessage.WindowHeight;
                     moveX = (int)Math.Sqrt(Step * Step - moveY * moveY);
                     X = (X - (moveX - preciseMoveX) > 0) ? X - (moveX - preciseMoveX) : 0;
                 }
 
             }
-            if (message.X < X && message.Y < Y) {
+            if (threatMessage.X < X && threatMessage.Y < Y) {
 
-                if (X + moveX < message.WindowWidth)
+                if (X + moveX < threatMessage.WindowWidth)
                     X = X + moveX;
                 else  {
-                    X = message.WindowWidth;
-                    moveX = message.WindowWidth - X;
+                    X = threatMessage.WindowWidth;
+                    moveX = threatMessage.WindowWidth - X;
                     moveY = (int)Math.Sqrt(Step * Step - moveX * moveX);
                 }
 
-                if (Y + moveY < message.WindowHeight)
+                if (Y + moveY < threatMessage.WindowHeight)
                     Y = Y + moveY;
                 else {
-                    moveY = message.WindowHeight - Y;
-                    Y = message.WindowHeight;
+                    moveY = threatMessage.WindowHeight - Y;
+                    Y = threatMessage.WindowHeight;
                     moveX = (int)Math.Sqrt(Step * Step - moveY * moveY);
                     X = (X + (moveX - preciseMoveX) > 0) ? X + (moveX - preciseMoveX) : 0;
                 }

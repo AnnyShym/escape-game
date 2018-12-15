@@ -40,13 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Message.cs" />
-    <Compile Include="Classes\Observable.cs" />
-    <Compile Include="Classes\Observer.cs" />
+    <Compile Include="Classes\ThreatMessage.cs" />
+    <Compile Include="Classes\Hunter.cs" />
+    <Compile Include="Classes\Avoidant.cs" />
     <Compile Include="Classes\Publisher.cs" />
-    <Compile Include="Classes\VectorObserver.cs" />
+    <Compile Include="Classes\VectorAvoidant.cs" />
     <Compile Include="Interfaces\IMessage.cs" />
-    <Compile Include="Interfaces\IObservable.cs" />
+    <Compile Include="Interfaces\IThreatMessage.cs" />
+    <Compile Include="Interfaces\IHunter.cs" />
+    <Compile Include="Interfaces\IAvoidant.cs" />
     <Compile Include="Interfaces\IObserver.cs" />
     <Compile Include="Interfaces\IPublisher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

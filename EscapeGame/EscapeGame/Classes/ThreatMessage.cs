@@ -5,7 +5,7 @@ namespace EscapeGame.Classes
     /// <summary>
     /// The message for sending from observable to his observers
     /// </summary>
-    public class Message : IMessage
+    public class ThreatMessage : IThreatMessage
     {
 
         public int X { get; private set; }
@@ -16,7 +16,7 @@ namespace EscapeGame.Classes
 
         public int ActionRadius { get; private set; }
 
-        public Message(int x, int y, int windowWidth, int windowHeight, int actionRadius)
+        public ThreatMessage(int x, int y, int windowWidth, int windowHeight, int actionRadius)
         {
 
             X = x;

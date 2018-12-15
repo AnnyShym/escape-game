@@ -7,7 +7,7 @@ namespace EscapeGame.Classes
     /// <summary>
     /// The A point
     /// </summary>
-    public class Observable : IObservable, IDisposable
+    public class Hunter : IHunter, IDisposable
     {
 
         public int X { get; private set; }
@@ -20,7 +20,7 @@ namespace EscapeGame.Classes
 
         private bool isDisposed;
 
-        public Observable(int x, int y, int windowWidth, int windowHeight, int step, int actionRadius, IPublisher publisher)
+        public Hunter(int x, int y, int windowWidth, int windowHeight, int step, int actionRadius, IPublisher publisher)
         {
 
             if (x < 0)
@@ -104,7 +104,7 @@ namespace EscapeGame.Classes
                     break;
             }
 
-            PublisherObject.NotifyObservers(new Message(X, Y, windowWidth, windowHeight, ActionRadius));
+            PublisherObject.NotifyObservers(new ThreatMessage(X, Y, windowWidth, windowHeight, ActionRadius));
 
         }
 
@@ -181,7 +181,7 @@ namespace EscapeGame.Classes
 
             }
 
-            PublisherObject.NotifyObservers(new Message(X, Y, windowWidth, windowHeight, ActionRadius));
+            PublisherObject.NotifyObservers(new ThreatMessage(X, Y, windowWidth, windowHeight, ActionRadius));
 
         }
 
@@ -204,7 +204,7 @@ namespace EscapeGame.Classes
             Dispose(true);
         }
 
-        ~Observable()
+        ~Hunter()
         {
             Dispose(false);
         }

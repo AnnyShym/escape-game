@@ -2,7 +2,7 @@
 
 namespace EscapeGame.Interfaces
 {
-    public interface IObservable
+    public interface IHunter
     {
 
         int X { get; }
